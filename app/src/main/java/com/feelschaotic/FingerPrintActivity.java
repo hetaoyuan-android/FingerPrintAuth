@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
+//无界面
 public class FingerPrintActivity extends Activity {
 
     public final static String TYPE = "type";
@@ -43,7 +43,7 @@ public class FingerPrintActivity extends Activity {
 
     protected void initialize() {
         mType = getIntent().getStringExtra(TYPE);
-       
+        mType ="login";
         mFingerprintManagerUtil = new FingerprintManagerUtil(this, () -> beginAuthAnim(), new MyAuthCallbackListener());
         mIsSupportFingerprint = mFingerprintManagerUtil.isSupportFingerprint();
         mFingerPrintTypeController = new FingerPrintTypeController();
