@@ -1,8 +1,17 @@
 package com.feelschaotic;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+import android.app.KeyguardManager;
+import android.content.Context;
+import android.os.Build;
+import android.os.CancellationSignal;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.feelschaotic.fingerprintauth.R;
@@ -17,6 +26,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startFingerPrint();
+        //android p build的编译版本需要到29
+//        showBiometricPromptDialog(this.getApplicationContext());
+
+
+
     }
 
     private void startFingerPrint() {
@@ -50,4 +64,53 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+    /*
+    @SuppressLint("MissingPermission")
+    @TargetApi(Build.VERSION_CODES.Q)
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public void showBiometricPromptDialog(Context context) {
+        final KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(
+                Context.KEYGUARD_SERVICE);
+
+        if (keyguardManager.isKeyguardSecure()) {
+            final BiometricPrompt.AuthenticationCallback authenticationCallback =
+                    new BiometricPrompt.AuthenticationCallback() {
+                        @Override
+                        public void onAuthenticationSucceeded(
+                                BiometricPrompt.AuthenticationResult result) {
+                            //successRunnable.run();
+                            Log.d("TAG", "onAuthenticationSucceeded: ");
+                        }
+
+                        @Override
+                        public void onAuthenticationError(int errorCode, CharSequence errString) {
+                            //Do nothing
+                            Log.d("TAG", "onAuthenticationError: " + errorCode + ", str: " + errString);
+                        }
+                    };
+
+
+            final Handler handler = new Handler(Looper.getMainLooper());
+
+            final BiometricPrompt.Builder builder = new BiometricPrompt.Builder(context)
+                    .setTitle("verify it is you?")
+                    .setNegativeButton("Negative Btn", runnable -> handler.post(runnable), (dialog, which) -> {
+                        Log.d("TAG", "showLockScreen: negative btn clicked, do nothing");
+                    })
+                    .setSubtitle("that is subtitile");
+
+            if (keyguardManager.isDeviceSecure()) {
+                builder.setDeviceCredentialAllowed(false);
+            }
+
+            final BiometricPrompt bp = builder.build();
+            bp.authenticate(new CancellationSignal(),
+                    runnable -> handler.post(runnable),
+                    authenticationCallback);
+        } else {
+            Log.d("TAG", "showLockScreen:  no in scrue.... no password");
+        }
+    }
+    */
 }
